@@ -17,7 +17,6 @@ app.use(express.json({
 }))
 
 // Routes
-
 app.all('/',(req,res)=>{
      res.json({
         message:"HOMEPAGE"

@@ -1,4 +1,4 @@
-import {asyncHandler} from "../utils/asyncHandler.js"
+import asyncHandler from "../utils/asyncHandler.js"
 import {ApiError} from "../utils/ApiError.js"
 import { User } from "../models/user.model.js";
 import { uploadResource } from "../utils/cloudinary.js";
@@ -18,7 +18,7 @@ const register = asyncHandler(async(req,res)=>{
         throw new ApiError(400,"All fields are required")
     }
  
-    const userExist = await User.findOne(email)
+    const userExist = await User.findOne({email})
 
     if(userExist){
         throw new ApiError(400,"User Already Exist with following email")
@@ -29,9 +29,9 @@ const register = asyncHandler(async(req,res)=>{
     if(!avatarLocalPath){
         throw new ApiError(400,"Kidnly Upload Avatar")
     }
-
+    console.log("flag before uploading ")
     const uploadResponse = await uploadResource(avatarLocalPath);
-    
+    console.log("flag after uploading ")
     const user = await User.create({
         name,
         email,

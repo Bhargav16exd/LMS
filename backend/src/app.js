@@ -30,6 +30,6 @@ import userRouter from "./routes/user.router.js"
 
 // APP Routing 
 
-app.all("/api/v1/user",userRouter)
+app.use("/api/v1/user/",userRouter);
 
 export default app;

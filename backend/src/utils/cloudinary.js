@@ -10,11 +10,11 @@ cloudinary.config({
 
 const uploadResource = async(filePath) =>{
     try {
-
+        
         if(!filePath) return null ;
         const response = await cloudinary.uploader.upload(filePath,{resource_type:"auto"})
-        fs.unlink(filePath)
-        return response ;
+        fs.unlinkSync(filePath)
+        return response;
 
     } catch (error) {
         console.log("Error While Uploading Avatar" , error)

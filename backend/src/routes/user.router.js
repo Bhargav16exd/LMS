@@ -6,8 +6,7 @@ const router = Router();
 
 // User Routes 
 
-router.route("/register")
-.post( upload.single("avatar"),register )
+router.route("/register").post( upload.single("avatar"),register )
 
 
 export default router;

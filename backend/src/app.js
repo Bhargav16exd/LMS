@@ -24,4 +24,12 @@ app.all('/',(req,res)=>{
 })
 
 
+// Api routes imports
+
+import userRouter from "./routes/user.router.js"
+
+// APP Routing 
+
+app.all("/api/v1/user",userRouter)
+
 export default app;

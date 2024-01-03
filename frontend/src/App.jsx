@@ -1,17 +1,17 @@
 import { useState } from 'react'
 import './App.css'
-import  {Routes} from "react-router-dom"
+import  {Route, Routes} from "react-router-dom"
 import Footer from './components/Footer'
-import Homelayout from './Layout/Homelayout'
+import Homepage from './Pages/Homepage'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    // <Routes>
+    <Routes>
 
-    // </Routes>
-    <Homelayout/>
+      <Route path='/' element={<Homepage/>}></Route>
+
+    </Routes>
   )
 }
 

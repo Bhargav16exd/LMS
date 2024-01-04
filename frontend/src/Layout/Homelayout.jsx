@@ -1,9 +1,17 @@
 import {FiMenu} from "react-icons/fi"
 import {AiFillCloseCircle} from "react-icons/ai"
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 import Footer from "../components/Footer";
+import {useDispatch, useSelector} from "react-redux"
 
 function Homelayout ({children}){
+
+   const dispatch = useDispatch()
+   const navigate = useNavigate()
+
+   const isLoggedIn = useSelector((state)=> state?.auth?.isLoggedIn);
+   const role = useSelector((state)=> state?.auth?.role);
+
 
 
     function changeWidth(){
@@ -15,6 +23,13 @@ function Homelayout ({children}){
        const element = document.getElementsByClassName("drawer-toggle");
        element[0].checked=false;
        changeWidth();
+    }
+
+    function handleLogout(e){
+        e.preventDefault()
+
+        // const res = dispatch(logout());
+        navigate('/')
     }
 
    return(
@@ -43,9 +58,35 @@ function Homelayout ({children}){
         </li>
         
         <li><Link to="/">Home</Link></li>
+        {isLoggedIn && role === "ADMIN" && (<li><Link to="/admin/dashboard">Admin Dashboard</Link></li>)}
         <li><Link to="/courses">courses</Link></li>
         <li><Link to="/contact">Contact Us</Link></li>
         <li><Link to="/about">About Us</Link></li>
+
+        {!isLoggedIn && (
+          <div className="my-4 flex flex-row justify-evenly">
+
+            <button className="rounded-sm py-2 px-4 border border-yellow-600 text-yellow-600 font-semibold">
+             <Link to="/login">Login</Link>
+            </button>
+            <button className="rounded-sm py-2 px-4 bg-yellow-600 text-white font-semibold">
+             <Link to="/signup">Sign Up</Link>
+            </button>
+
+          </div>
+        )}
+        {isLoggedIn && (
+          <div className="my-4 flex flex-row justify-evenly">
+
+            <button className="rounded-sm py-2 px-4 border border-yellow-600 text-yellow-600 font-semibold">
+             <Link to="/user/profile">Profile</Link>
+            </button>
+            <button className="rounded-sm py-2 px-4 bg-yellow-600 text-white font-semibold">
+             <Link onClick={handleLogout}>Logout</Link>
+            </button>
+
+          </div>
+        )}
 
         </ul>
         </div> 

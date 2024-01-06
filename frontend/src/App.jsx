@@ -3,6 +3,7 @@ import './App.css'
 import  {Route, Routes} from "react-router-dom"
 import Homepage from './Pages/Homepage'
 import Aboutus from './Pages/Aboutuspage'
+import Notfound from './Pages/NotFoundpage'
 
 function App() {
 
@@ -11,6 +12,9 @@ function App() {
 
       <Route path='/' element={<Homepage/>}> </Route>
       <Route path='/about' element={<Aboutus/>}></Route>
+
+
+      <Route path='*' element={<Notfound/>}></Route>
 
     </Routes>
   )

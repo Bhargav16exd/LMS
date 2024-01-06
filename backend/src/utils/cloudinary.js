@@ -18,7 +18,7 @@ const uploadResource = async(filePath) =>{
 
     } catch (error) {
         console.log("Error While Uploading Avatar" , error)
-        fs.unlink(filePath)        
+        fs.unlinkSync(filePath)        
     }
 }
 

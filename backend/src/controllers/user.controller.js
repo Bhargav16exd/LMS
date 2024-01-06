@@ -12,9 +12,10 @@ const register = asyncHandler(async(req,res)=>{
     // Create a user 
     // Get user avatar save to local storage upload to cloudinary when done
 
-    const { email,password,name } = req.body;
+    const { email,password,fullName } = req.body;
     
-    if(!email || !password || !name){
+    console.log(req.body)
+    if(!email || !password || !fullName){
         throw new ApiError(400,"All fields are required")
     }
  
@@ -23,17 +24,18 @@ const register = asyncHandler(async(req,res)=>{
     if(userExist){
         throw new ApiError(400,"User Already Exist with following email")
     }
-
+    
+    console.log(req.file)
     const avatarLocalPath = req.file?.path
     
     if(!avatarLocalPath){
         throw new ApiError(400,"Kidnly Upload Avatar")
     }
-    console.log("flag before uploading ")
+
     const uploadResponse = await uploadResource(avatarLocalPath);
-    console.log("flag after uploading ")
+
     const user = await User.create({
-        name,
+        fullName,
         email,
         password,
         avatar:uploadResponse?.url || "",

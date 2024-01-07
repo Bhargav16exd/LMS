@@ -3,6 +3,7 @@ import {ApiError} from "../utils/ApiError.js"
 import { User } from "../models/user.model.js";
 import { uploadResource } from "../utils/cloudinary.js";
 import {ApiResponse} from "../utils/ApiResponse.js"
+import fs from "fs"
 
 
 const generateToken = async (userId) =>{
@@ -29,12 +30,14 @@ const register = asyncHandler(async(req,res)=>{
     
     
     if(!email || !password || !fullName){
+        req.file ? fs.unlinkSync(req.file.path) : ""
         throw new ApiError(400,"All fields are required")
     }
  
     const userExist = await User.findOne({email})
 
     if(userExist){
+        req.file ? fs.unlinkSync(req.file.path) : ""
         throw new ApiError(400,"User Already Exist with following email")
     }
     

@@ -21,7 +21,6 @@ export const createAcc= createAsyncThunk(
                 },
                 error:"Error"
             },
-            
             )
             return (await res).data
             
@@ -58,8 +57,8 @@ const authSlice = createSlice({
     reducers:{},
     extraReducers: (builder)=>{
         builder.addCase(loginAcc.fulfilled,(state,action)=>{
-            localStorage.setItem("data",JSON.stringify(action?.payload?.user))
-            localStorage.setItem("role",action?.payload?.user?.role)
+            localStorage.setItem("data",JSON.stringify(action?.payload?.data?.loggedInUserDetails))
+            localStorage.setItem("role",action?.payload?.data?.loggedInUserDetails?.role)
             localStorage.setItem("isLoggedIn",true)
             state.data = action?.payload?.user
             state.isLoggedIn = true

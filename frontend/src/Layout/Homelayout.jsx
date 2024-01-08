@@ -12,8 +12,6 @@ function Homelayout ({children}){
    const isLoggedIn = useSelector((state)=> state?.auth?.isLoggedIn);
    const role = useSelector((state)=> state?.auth?.role);
 
-
-
     function changeWidth(){
         const drawerSide = document.getElementsByClassName("drawer-side");
          drawerSide[0].style.width = 'auto' ;
@@ -58,10 +56,10 @@ function Homelayout ({children}){
         </li>
         
         <li><Link to="/">Home</Link></li>
-        {isLoggedIn && role === "ADMIN" && (<li><Link to="/admin/dashboard">Admin Dashboard</Link></li>)}
         <li><Link to="/courses">courses</Link></li>
         <li><Link to="/contact">Contact Us</Link></li>
         <li><Link to="/about">About Us</Link></li>
+        {isLoggedIn && role === 'ADMIN' && <li><Link to="/admin/dashboard">Admin Dashboard</Link></li>}
 
         {!isLoggedIn && (
           <div className="my-4 flex flex-row justify-evenly">

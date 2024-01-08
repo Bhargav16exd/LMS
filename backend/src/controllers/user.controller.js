@@ -124,7 +124,7 @@ const logout = asyncHandler(async(req,res)=>{
         secure:true
     }
 
-    res
+    return res
     .status(200)
     .clearCookie("accessToken",options)
     .json(
@@ -132,8 +132,20 @@ const logout = asyncHandler(async(req,res)=>{
     )
 })
 
+const userProfile = asyncHandler(async(req,res)=>{
+
+     const user = await User.findById(req.user?._id).select("-role");
+    
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,"User Data Fetched Success",user)
+    )
+})
+
 export {
     register,
     login,
-    logout
+    logout,
+    userProfile
 }

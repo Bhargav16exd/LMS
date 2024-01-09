@@ -178,11 +178,7 @@ const forgotPassword = asyncHandler(async(req,res)=>{
 
     const resetPasswordURL = `http://localhost:9000/api/v1/user/reset-password/${forgotToken}`
 
-    // sending mail
-
-    const mailData = await sendMail(email,resetPasswordURL)
-
-    console.log(mailData)
+    await sendMail(email,resetPasswordURL)
 
     return res
     .status(200)

@@ -1,7 +1,7 @@
 import asyncHandler from "../utils/asyncHandler.js"
 import {ApiError} from "../utils/ApiError.js"
 import { User } from "../models/user.model.js";
-import { uploadResource } from "../utils/cloudinary.js";
+import { deleteResource, uploadResource } from "../utils/cloudinary.js";
 import {ApiResponse} from "../utils/ApiResponse.js"
 import fs from "fs"
 import crypto from "crypto"
@@ -188,9 +188,7 @@ const forgotPassword = asyncHandler(async(req,res)=>{
 })
 
 const resetPassword = asyncHandler(async(req,res)=>{
-
-    console.log(req.params.resetToken,req.body)
-    
+  
     const resetToken = req.params.resetToken;
     const {password} = req.body;
 
@@ -211,16 +209,74 @@ const resetPassword = asyncHandler(async(req,res)=>{
     user.password = password ;
 
     user.forgotPasswordToken = null;
-    user.forgotPasswordExpiry= null;
+    user.forgotPasswordExpiry = null;
 
     await user.save();
-
+     
+    console.log(user)
     return res
     .status(200)
     .json(
         new ApiResponse(200,"Reset Password Success")
     )
     
+})
+
+const changePassword = asyncHandler(async(req,res)=>{
+
+    const {oldPassword,newPassword} = req.body
+
+    if( !oldPassword || !newPassword ){
+        throw new ApiError(400,"All Fields are Required")
+    }
+
+    const user = await User.findById(req.user._id).select("password")
+     
+    const result = await user.isPasswordValid(oldPassword)
+
+    if(!result){
+        throw new ApiError(400,"Incorrect Old password")
+    }
+
+    user.password = newPassword
+    await user.save()
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,"Password Changes Succesfully")
+    )
+
+})
+
+const changeAvatar = asyncHandler(async(req,res)=>{
+   
+    const userD = await User.findById(req.user?._id)
+
+    const oldAvatarId = userD.avatarId
+    
+    const avatarPath = req.file?.path 
+    
+    if(!avatarPath){
+        throw new ApiError(400,"Kindly Upload Avatar")
+    }
+
+    const avatarURL = await uploadResource(avatarPath)
+
+    const user = await User.findByIdAndUpdate(req.user?._id , {
+        avatar : avatarURL.url,
+        avatarId : avatarURL.public_id
+    })
+
+    await user.save();
+
+    await deleteResource(oldAvatarId)
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,"Avatar Changes Sucess",user)
+    )
 })
 
 
@@ -231,6 +287,8 @@ export {
     logout,
     userProfile,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    changePassword,
+    changeAvatar
 }
 

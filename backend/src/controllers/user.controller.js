@@ -5,6 +5,7 @@ import { uploadResource } from "../utils/cloudinary.js";
 import {ApiResponse} from "../utils/ApiResponse.js"
 import fs from "fs"
 import crypto from "crypto"
+import { sendMail } from "../utils/Mail.js";
 
 const generateToken = async (userId) =>{
   try {
@@ -175,15 +176,24 @@ const forgotPassword = asyncHandler(async(req,res)=>{
 
     const forgotToken = await forgotPasswordTokenGenerator(email);
 
-    const resetPasswordURL = `http://localhost:9000/api/v1/reset-passoword/${forgotToken}`
+    const resetPasswordURL = `http://localhost:9000/api/v1/user/reset-password/${forgotToken}`
 
     // sending mail
 
+    const mailData = await sendMail(email,resetPasswordURL)
+
+    console.log(mailData)
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,"Reset Email Sent Successfully")
+    )
 })
 
 const resetPassword = asyncHandler(async(req,res)=>{
     
-    const resetToken = req.params;
+    const resetToken = req.params?.resetToken;
     const {password} = req.body;
 
     if(!resetToken){
@@ -213,7 +223,7 @@ const resetPassword = asyncHandler(async(req,res)=>{
     .json(
         new ApiResponse(200,"Reset Password Success")
     )
-
+    
 })
 
 
@@ -222,5 +232,7 @@ export {
     register,
     login,
     logout,
-    userProfile
+    userProfile,
+    forgotPassword,
+    resetPassword
 }

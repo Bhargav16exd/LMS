@@ -1,7 +1,9 @@
 import {google} from "googleapis"
 import nodemailer from "nodemailer"
+import { SUBJECT } from "../const.js"
 
-export const sendMail = async(email)=>{
+
+export const sendMail = async(email,text)=>{
     
     
           const oAuth2Client = new google.auth.OAuth2(
@@ -27,8 +29,8 @@ export const sendMail = async(email)=>{
           const mailOptions = {
               from: process.env.OAUTH_EMAIL ,
               to:email,
-              subject,
-              text,
+              subject:SUBJECT,
+              text:text,
             }    
          
            const info = await trasporter.sendMail(mailOptions) 

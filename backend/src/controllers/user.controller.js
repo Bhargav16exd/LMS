@@ -192,8 +192,10 @@ const forgotPassword = asyncHandler(async(req,res)=>{
 })
 
 const resetPassword = asyncHandler(async(req,res)=>{
+
+    console.log(req.params.resetToken,req.body)
     
-    const resetToken = req.params?.resetToken;
+    const resetToken = req.params.resetToken;
     const {password} = req.body;
 
     if(!resetToken){
@@ -202,10 +204,9 @@ const resetPassword = asyncHandler(async(req,res)=>{
 
     const encryptedResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
 
-    const user = await User.findOne({
-        forgotPasswordExpiry:{$gt:Date.now()},
-        encryptedResetToken
-    }).select("password")
+    const user = await User.findOne({forgotPasswordToken:encryptedResetToken , forgotPasswordExpiry:{$gt:Date.now()}})
+
+    console.log(user)
 
     if(!user){
         throw new ApiError(400,"Session Expired Try Again Later")
@@ -236,3 +237,4 @@ export {
     forgotPassword,
     resetPassword
 }
+

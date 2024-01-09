@@ -4,11 +4,10 @@ import { User } from "../models/user.model.js";
 import { uploadResource } from "../utils/cloudinary.js";
 import {ApiResponse} from "../utils/ApiResponse.js"
 import fs from "fs"
-
+import crypto from "crypto"
 
 const generateToken = async (userId) =>{
   try {
-
     const user = await User.findById(userId)
     const accessToken = await user.generateAccessToken()
     return accessToken ;
@@ -16,6 +15,23 @@ const generateToken = async (userId) =>{
   } catch (error) {
     throw new ApiError(500,"Error While generating access token")
   }
+}
+
+const forgotPasswordTokenGenerator = async(email)=>{
+    try {
+
+        const user = await User.findOne({email})
+        if(!user){
+            throw new ApiError(400,"Given Email doesnt exist")
+        }
+        const forgotPasswordToken = await user.generateForgotPassowordToken();
+        user.save();
+
+        return forgotPasswordToken;
+        
+    } catch (error) {
+        throw new ApiError(500,"Internal Server Error")
+    }
 }
 
 const register = asyncHandler(async(req,res)=>{
@@ -142,6 +158,65 @@ const userProfile = asyncHandler(async(req,res)=>{
         new ApiResponse(200,"User Data Fetched Success",user)
     )
 })
+
+const forgotPassword = asyncHandler(async(req,res)=>{
+    
+    // get email
+    // create token 
+    // create expiry 
+    //store them in db
+    // send them an API to hit which has token embeded in it 
+
+    const {email} = req.body
+
+    if(!email){
+        throw new ApiError(400,"Kindly Provide Token")
+    }
+
+    const forgotToken = await forgotPasswordTokenGenerator(email);
+
+    const resetPasswordURL = `http://localhost:9000/api/v1/reset-passoword/${forgotToken}`
+
+    // sending mail
+
+})
+
+const resetPassword = asyncHandler(async(req,res)=>{
+    
+    const resetToken = req.params;
+    const {password} = req.body;
+
+    if(!resetToken){
+        throw new ApiError(400,"Invaild reset token")
+    }
+
+    const encryptedResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+    const user = await User.findOne({
+        forgotPasswordExpiry:{$gt:Date.now()},
+        encryptedResetToken
+    }).select("password")
+
+    if(!user){
+        throw new ApiError(400,"Session Expired Try Again Later")
+    }
+
+    user.password = password ;
+
+    user.forgotPasswordToken = null;
+    user.forgotPasswordExpiry= null;
+
+    await user.save();
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,"Reset Password Success")
+    )
+
+})
+
+
 
 export {
     register,

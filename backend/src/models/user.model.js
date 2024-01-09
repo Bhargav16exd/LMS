@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import crpyto from "crypto"
 
 const userSchema = new mongoose.Schema({
     
@@ -69,6 +70,13 @@ userSchema.methods.generateAccessToken = function(){
     })
 }
 
+userSchema.methods.generateForgotPassowordToken = function(){
+   const resetToken = crpyto.randomBytes(16).toString('hex')
+   const encryptedResetToken = crpyto.createHash('sha256').update(resetToken).digest('hex')
+   this.forgotPasswordToken = encryptedResetToken;
+   this.forgotPasswordExpiry = Date.now() + 1000*60*5;
+   return resetToken;
+}
 
 
 export const User = mongoose.model("User",userSchema);

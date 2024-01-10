@@ -8,15 +8,17 @@ const courseSchema = new mongoose.Schema({
     description:{
         type:String
     },
-    thumbnail:{
-        thumbnailURL:{
-            type:String
-        },
-        thumbnailId:{
-            type:String
-        }
+    thumbnailURL:{
+        type:String
+    },
+    thumbnailId:{
+       type:String
     },
     instructor:{
+        type:String,
+        required:true
+    },
+    createdBy:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"
     },

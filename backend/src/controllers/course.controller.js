@@ -3,6 +3,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { uploadResource } from "../utils/cloudinary.js";
+import { Video } from "../models/video.model.js";
 
 const createCourse = asyncHandler(async(req,res)=>{
 
@@ -53,8 +54,66 @@ const listCourses = asyncHandler(async(req,res)=>{
 
 })
 
+const createLecture = asyncHandler(async(req,res)=>{
+  
+    const {title , description} = req.body
+    const {courseId} = req.params
+    const videoPath = req.file?.path
+    
+    if(!courseId){
+        throw new ApiError(400,"Invaild Request")
+    }
+
+    if(!title || !description){
+        throw new ApiError(400,"All fields are required")
+    }
+
+    if(!videoPath){
+        throw new ApiError(400,"Kindly Upload Video")
+    }
+    const videoUploadData = await uploadResource(videoPath)
+    const video = await Video.create({
+        title,
+        description,
+        videoURL:videoUploadData.secure_url,
+        videoId:videoUploadData.public_id
+    })
+    await video.save()
+
+    const course = await Course.findByIdAndUpdate(courseId,{
+        $push: {lectures:video._id}
+    },{new:true})
+
+    await course.save();
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,"Video Uploaded Success",video)
+    )
+})
+
+const viewLecture = asyncHandler(async(req,res)=>{
+       
+    const {courseId} = req.params
+    
+    if(!courseId){
+        throw new ApiError(400,"Invalid Request")
+    }
+
+    const lectures = await Course.findById(courseId).populate('lectures').select("lectures")
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,"Lectures Fetch Success",lectures)
+    )
+})
+
 
 export {
     listCourses,
-    createCourse
+    createCourse,
+    createLecture,
+    viewLecture
 }

@@ -9,12 +9,12 @@ const videoSchema = new mongoose.Schema({
     description:{
         type:String
     },
-    lectureURL:{
+    videoURL:{
         type:String,
         required:true,
         unique:true 
     },
-    lectureId:{
+    videoId:{
         type:String,
         required:true,
         unique:true

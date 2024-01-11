@@ -103,6 +103,10 @@ const viewLecture = asyncHandler(async(req,res)=>{
 
     const lectures = await Course.findById(courseId).populate('lectures').select("lectures")
 
+    if(!lectures){
+        throw new ApiError(400,"No such course exist")
+    }
+
     return res
     .status(200)
     .json(
@@ -164,6 +168,29 @@ const updateThumbnail = asyncHandler(async(req,res)=>{
     .json(
         new ApiResponse(200,"Thumbnail Updated successfully",course)
     )
+})
+
+const deleteCourse = asyncHandler(async(req,res)=>{
+
+    const courseId = req.params?.courseId
+
+    if(!courseId){
+        throw new ApiError(400,"Invalid Request")
+    }
+
+    const course = await Course.findById(courseId).select("lectures")
+    const lectures = course.lectures
+    
+    
+    lectures.map(async (video)=> await Video.findByIdAndDelete(video._id))
+    
+    await Course.findByIdAndDelete(courseId);
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,"Course Deleted Successfully")
+    )
 
 })
 
@@ -174,5 +201,6 @@ export {
     createLecture,
     viewLecture,
     updateCourse,
-    updateThumbnail
+    updateThumbnail,
+    deleteCourse
 }

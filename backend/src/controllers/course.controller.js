@@ -72,6 +72,7 @@ const createLecture = asyncHandler(async(req,res)=>{
         throw new ApiError(400,"Kindly Upload Video")
     }
     const videoUploadData = await uploadResource(videoPath)
+
     const video = await Video.create({
         title,
         description,
@@ -179,11 +180,16 @@ const deleteCourse = asyncHandler(async(req,res)=>{
     }
 
     const course = await Course.findById(courseId).select("lectures")
-    const lectures = course.lectures
+
+    if(!course){
+        throw new ApiError(400,"No Such Course Exists")
+    }
+    const lectures = course?.lectures
     
-    
-    lectures.map(async (video)=> await Video.findByIdAndDelete(video._id))
-    
+    if(lectures){
+    const public_ids = await Promise.all(lectures.map(async (video)=> await Video.findById(video._id).select("videoId")))
+    public_ids.map(async(idObject)=> await deleteResource(idObject.videoId))
+    }
     await Course.findByIdAndDelete(courseId);
 
     return res
@@ -194,6 +200,32 @@ const deleteCourse = asyncHandler(async(req,res)=>{
 
 })
 
+const deleteLecture = asyncHandler(async(req,res)=>{
+
+    const {courseId,lectureId} = req.params
+
+    if(!courseId || !lectureId){
+        throw new ApiError(400,"Invalid Request")
+    }
+
+    const course = await Course.findById(courseId)
+    const lectureArr = course.lectures;
+    const updatedLectures = lectureArr.filter(lecture => lecture._id.toString()!=lectureId)
+    course.lectures = updatedLectures
+    await course.save()
+
+    const video = await Video.findById(lectureId)
+    const public_id = video.videoId
+    await deleteResource(public_id)
+    await Video.findByIdAndDelete(lectureId)
+    
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,"Video Deleted Successfully")
+    )
+})
+
 
 export {
     listCourses,
@@ -202,5 +234,6 @@ export {
     viewLecture,
     updateCourse,
     updateThumbnail,
-    deleteCourse
+    deleteCourse,
+    deleteLecture
 }

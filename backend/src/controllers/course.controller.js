@@ -189,6 +189,7 @@ const deleteCourse = asyncHandler(async(req,res)=>{
     if(lectures){
     const public_ids = await Promise.all(lectures.map(async (video)=> await Video.findById(video._id).select("videoId")))
     public_ids.map(async(idObject)=> await deleteResource(idObject.videoId))
+    lectures.map(async(v)=> await Video.findByIdAndDelete(v._id))
     }
     await Course.findByIdAndDelete(courseId);
 

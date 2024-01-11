@@ -14,7 +14,6 @@ router.route("/list-courses").get(listCourses)
 
 
 
-router.route("/:courseId/view-lectures").get(authMiddleware,viewLecture)
 
 // Authorized Routes
 
@@ -22,6 +21,8 @@ router.route("/create-course").post(authMiddleware,upload.single("thumbnail"),cr
 router.route("/:courseId/edit-thumbnail").post(authMiddleware,upload.single("thumbnail"),updateThumbnail)
 router.route("/:courseId/delete-course").post(authMiddleware,deleteCourse)
 router.route("/:courseId/edit-course").post(authMiddleware,updateCourse)
+
+router.route("/:courseId/view-lectures").get(authMiddleware,viewLecture)
 router.route("/:courseId/create-lecture").post(authMiddleware,upload.single("video"),createLecture)
 router.route("/:courseId/delete-lecture/:lectureId").post(authMiddleware,deleteLecture)
 

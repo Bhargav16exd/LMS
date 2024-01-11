@@ -12,7 +12,7 @@ const authMiddleware = asyncHandler(async(req,res,next)=>{
             throw new ApiError(400,"You are not authorized")
         }
         
-        const decodedToken = jwt.verify(token,process.env.SECRETACCESSKEYJWT)
+        const decodedToken =  jwt.verify(token,process.env.SECRETACCESSKEYJWT)
 
         const user = await User.findById(decodedToken._id)
 
@@ -30,4 +30,19 @@ const authMiddleware = asyncHandler(async(req,res,next)=>{
 
 })
 
-export {authMiddleware}
+const isAuthorized = asyncHandler(async(req,res,next)=>{
+  
+    console.log(req.user.role)
+
+    if(req.user.role == "ADMIN"){
+        next()
+    }
+    else{
+        throw new ApiError(400,"Not Authorized") 
+    }   
+})
+
+
+
+
+export {authMiddleware,isAuthorized}

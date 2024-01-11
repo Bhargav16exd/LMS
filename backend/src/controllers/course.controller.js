@@ -227,6 +227,35 @@ const deleteLecture = asyncHandler(async(req,res)=>{
     )
 })
 
+const editLecture = asyncHandler(async(req,res)=>{
+
+    const {courseId,lectureId} = req.params
+    const {title , description } = req.body
+
+    if(!courseId || !lectureId){
+        throw new ApiError(400,"Invalid Request")
+    }
+
+    const lecture = await Video.findById(lectureId)
+ 
+    if(title){
+        lecture.title = title
+    }
+    if(description){
+        lecture.description = description
+    }
+
+    await lecture.save();
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,"Lecture Updated Success", lecture)
+    )
+
+
+})
+
 
 export {
     listCourses,
@@ -236,5 +265,6 @@ export {
     updateCourse,
     updateThumbnail,
     deleteCourse,
-    deleteLecture
+    deleteLecture,
+    editLecture
 }

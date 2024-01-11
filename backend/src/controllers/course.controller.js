@@ -2,7 +2,7 @@ import { Course } from "../models/course.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
-import { uploadResource } from "../utils/cloudinary.js";
+import { deleteResource, uploadResource } from "../utils/cloudinary.js";
 import { Video } from "../models/video.model.js";
 
 const createCourse = asyncHandler(async(req,res)=>{
@@ -110,10 +110,69 @@ const viewLecture = asyncHandler(async(req,res)=>{
     )
 })
 
+const updateCourse = asyncHandler(async(req,res)=>{
+  
+    const {title,description,instructor} = req.body
+    const {courseId} = req.params;
+
+    if(!courseId){
+        throw new ApiError(400,"Invalid Request")
+    }
+
+    const course = await Course.findByIdAndUpdate(courseId,{
+        title:title,
+        description:description,
+        instructor:instructor 
+    },{new:true})
+
+    await course.save();
+    
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,"Course Update Success",course)
+    )
+})
+
+const updateThumbnail = asyncHandler(async(req,res)=>{
+ 
+    const thumbnailpath = req.file?.path
+    const {courseId} = req.params;
+
+    if(!courseId){
+        throw new ApiError(400,"Invalid Request")
+    }
+    if(!thumbnailpath){
+        throw new ApiError(400,"Thumbnail is required")
+    }
+
+    const oldCourse = await Course.findById(courseId)
+    const oldThumbnailId = oldCourse.thumbnailId;
+
+    const thumbnail = await uploadResource(thumbnailpath)
+
+    const course = await Course.findByIdAndUpdate(courseId,{
+        thumbnailId:thumbnail.public_id,
+        thumbnailURL:thumbnail.secure_url  
+    },{new:true})
+
+    await course.save();
+    await deleteResource(oldThumbnailId);
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,"Thumbnail Updated successfully",course)
+    )
+
+})
+
 
 export {
     listCourses,
     createCourse,
     createLecture,
-    viewLecture
+    viewLecture,
+    updateCourse,
+    updateThumbnail
 }

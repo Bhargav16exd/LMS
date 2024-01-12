@@ -5,13 +5,12 @@ import cors from "cors"
 const app = express()
 
 // Basic Setup for server 
-
+app.use(cookieParser())
 app.use(urlencoded({extended:true}))
 app.use(cors({
     origin:process.env.ORIGIN,
-    credentials:true
+    credentials:true,
 }))
-app.use(cookieParser())
 app.use(express.static("public"))
 app.use(express.json({
     limit:"16kb"

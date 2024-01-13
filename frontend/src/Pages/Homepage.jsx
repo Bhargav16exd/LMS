@@ -9,7 +9,7 @@ function Homepage(){
                  <div className="w-1/2 space-y-6">
                     <h1 className="text-5xl font-semibold">
                         Find out best
-                        <span className="text-green-600 font-bold mx-4">
+                        <span className="text-yellow-600 font-bold mx-4">
                                   Online Courses 
                         </span>
                     </h1>

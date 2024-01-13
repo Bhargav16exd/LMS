@@ -7,7 +7,7 @@ function Footer(){
 
     return(
         <>
-        <footer className="relative left-0 bottom-0 h-[10vh] flex flex-col sm:flex-row items-center justify-between bg-black
+        <footer className="relative left-0 bottom-0 h-[10vh] flex flex-col sm:flex-row items-center justify-between bg-[#191A19]
         text-white py-5 sm:px-20">
          
          <section className="text-lg">

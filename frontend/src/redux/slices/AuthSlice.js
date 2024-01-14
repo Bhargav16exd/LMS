@@ -71,6 +71,24 @@ export const logout = createAsyncThunk(
     }
 )
 
+export const handleSubscribe = createAsyncThunk(
+   "auth/susscribe",
+   async function(courseId){
+    try {
+        const res = axiosInstance.post(`http://localhost:9000/api/v1/course/${courseId}/subscribe-course`)
+        toast.promise(res,{
+            loading:"subscribing",
+            success:"Subscription success",
+            error:"error while subscribing"
+        })
+        return (await res).data
+    } catch (error) {
+        console.log(error)
+            toast.error(error?.message) 
+    }
+   }
+)
+
 const authSlice = createSlice({
     name:"auth",
     initialState,
@@ -91,8 +109,15 @@ const authSlice = createSlice({
             state.data ={}
             state.isLoggedIn = false
             state.role =""
+            state.subscribedCourse=null;
             localStorage.clear()
         })
+        .addCase(handleSubscribe.fulfilled,(state,action)=>{
+            if(action.payload){
+            localStorage.setItem("course",action?.payload?.data?.subscribedCourse)
+            state.subscribedCourse = action?.payload?.data?.subscribedCourse
+            console.log(state.subscribedCourse)
+        }})
         
     } 
 })

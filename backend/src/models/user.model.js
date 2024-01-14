@@ -37,6 +37,10 @@ const userSchema = new mongoose.Schema({
         enum:["ADMIN","USER"],
         default:"USER"
     },
+    subscribedCourse:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Course"
+    }],
 
     forgotPasswordToken:String,
     forgotPasswordExpiry:Date
@@ -60,7 +64,7 @@ userSchema.methods.generateAccessToken = function(){
     return jwt.sign({
         _id:this._id,
         email:this.email,
-        role:this.role
+        role:this.role,
     }, 
     process.env.SECRETACCESSKEYJWT,
     {

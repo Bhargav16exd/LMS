@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { upload } from "../middlewares/multer.middleware.js";
-import { createCourse, createLecture, deleteCourse, deleteLecture, editLecture, listCourses, updateCourse, updateThumbnail, viewLecture } from "../controllers/course.controller.js";
+import {courseDetails, createCourse, createLecture, deleteCourse, deleteLecture, editLecture, listCourses, subCourses, subscribe, updateCourse, updateThumbnail, viewLecture } from "../controllers/course.controller.js";
 import { authMiddleware, isAuthorized} from "../middlewares/auth.middleware.js";
 
 
@@ -11,9 +11,14 @@ const router = Router()
 // Public Routes
 
 router.route("/list-courses").get(listCourses)
+router.route("/:courseId").get(courseDetails)
 
 // Authorized Routes
+
+router.route("/list/sub-courses").get(authMiddleware,subCourses)
 router.route("/:courseId/view-lectures").get(authMiddleware,viewLecture)
+router.route("/:id/subscribe-course").post(authMiddleware,subscribe)
+
 
 // Admin
 

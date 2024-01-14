@@ -4,6 +4,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { deleteResource, uploadResource } from "../utils/cloudinary.js";
 import { Video } from "../models/video.model.js";
+import { User } from "../models/user.model.js";
 
 const createCourse = asyncHandler(async(req,res)=>{
 
@@ -256,6 +257,71 @@ const editLecture = asyncHandler(async(req,res)=>{
 
 })
 
+const courseDetails = asyncHandler(async(req,res)=>{
+
+    const id = req.params?.courseId
+ 
+    if(!id){
+        throw new ApiError(400,"Invalid request")
+    }
+
+    const course = await Course.findById(id).select("-createdBy")
+
+    if(!course){
+        throw new ApiError(400,"No such course exist")
+    }
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,"Success",course)
+    )
+
+})
+// subscirbe route
+// get course details route
+
+const subscribe = asyncHandler(async(req,res)=>{
+ 
+    const id = req.params?.id
+    const user = req.user;
+
+    console.log(req.user)
+    if(!id){
+        throw new ApiError(400,"Invalid Request")
+    }
+
+    const course = await Course.findById(id)
+
+    if(!course){
+        throw new ApiError(400,"No such course exist")
+    }
+
+
+    user.subscribedCourse.push(id)
+    await user.save()
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,"Course Subscribed Successfully")
+    )
+})
+
+
+const subCourses = asyncHandler(async(req,res)=>{
+          
+    const user = await User.find(req.user._id).select("subscribedCourse")
+
+    console.log(user)
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,"Courses Fetched Success",user)
+    )
+
+})
 
 export {
     listCourses,
@@ -266,5 +332,8 @@ export {
     updateThumbnail,
     deleteCourse,
     deleteLecture,
-    editLecture
+    editLecture,
+    courseDetails,
+    subscribe,
+    subCourses
 }

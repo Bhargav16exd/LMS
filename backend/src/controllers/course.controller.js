@@ -45,8 +45,6 @@ const listCourses = asyncHandler(async(req,res)=>{
 
     const courses = await Course.find().select("-thumbnailId -createdBy ")
 
-    console.log(courses)
-
     return res
     .status(200)
     .json(
@@ -278,8 +276,7 @@ const courseDetails = asyncHandler(async(req,res)=>{
     )
 
 })
-// subscirbe route
-// get course details route
+
 
 const subscribe = asyncHandler(async(req,res)=>{
  
@@ -297,14 +294,13 @@ const subscribe = asyncHandler(async(req,res)=>{
         throw new ApiError(400,"No such course exist")
     }
 
-
     user.subscribedCourse.push(id)
     await user.save()
 
     return res
     .status(200)
     .json(
-        new ApiResponse(200,"Course Subscribed Successfully")
+        new ApiResponse(200,"Course Subscribed Successfully",user)
     )
 })
 

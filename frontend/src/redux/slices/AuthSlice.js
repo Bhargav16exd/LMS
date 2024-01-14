@@ -5,7 +5,8 @@ import axiosInstance from "../../helpers/axiosInstance"
 const initialState = {
     isLoggedIn : localStorage.getItem('isLoggedIn') || false,
     role: localStorage.getItem('role') || "",
-    data: localStorage.getItem('data') || {}
+    data: localStorage.getItem('data') || {},
+    subscribedCourse : localStorage.getItem('course') || []
 }
 
 export const createAcc= createAsyncThunk(
@@ -80,9 +81,11 @@ const authSlice = createSlice({
             localStorage.setItem("data",JSON.stringify(action?.payload?.data?.loggedInUserDetails))
             localStorage.setItem("role",action?.payload?.data?.loggedInUserDetails?.role)
             localStorage.setItem("isLoggedIn",true)
+            localStorage.setItem("course",action?.payload?.data?.loggedInUserDetails?.subscribedCourse)
             state.data = action?.payload?.user
             state.isLoggedIn = true
             state.role = action?.payload?.data?.loggedInUserDetails?.role
+            state.subscribedCourse = action?.payload?.data?.loggedInUserDetails?.subscribedCourse
         })
         .addCase(logout.fulfilled,(state,action)=>{
             state.data ={}

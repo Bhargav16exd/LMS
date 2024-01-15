@@ -7,6 +7,29 @@ const initialState = {
     course:{},
 }
 
+export const crtCourse = createAsyncThunk(
+    "/admin/create-course",
+    async function(data){
+        try {
+
+            const res = axiosInstance.post("http://localhost:9000/api/v1/course/create-course",data)
+            toast.promise(res,
+            {
+                success:"Course Created Successfully",
+                loading:"Creating Course",
+                error:"Error ! faild to create course"
+            }    
+            )
+            console.log(data)
+            return (await res).data
+            
+        } catch (error) {
+            console.log(error)
+            toast.error(error?.response?.data?.message)
+        }
+    }
+)
+
 export const getCourses = createAsyncThunk(
     "/course/course-list",
     async function(){

@@ -8,7 +8,7 @@ function CourseCard({title,description,thumbnail,id}){
 
     return(
         <>
-         <div className="rounded-xl  inline-block mx-5 h-auto w-[350px] overflow-hidden bg-[#191A19] text-white">
+         <div className=" my-5 rounded-xl  inline-block mx-5 h-auto w-[350px] overflow-hidden bg-[#191A19] text-white">
          <img src={thumbnail} className="h-[150px] w-full" />
          <div className="flex">
         <div className="w-1/2">

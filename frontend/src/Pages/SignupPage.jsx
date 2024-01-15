@@ -25,15 +25,12 @@ function Signup (){
         ...signUpData,
         [name]:value
      })
-     console.log(signUpData)
     }
     
     function getImage(e){
         e.preventDefault();
 
         const uploadedImage = e.target.files[0];
-
-        console.log(e.target.files)
 
         if(uploadedImage){
             setSignUpData({

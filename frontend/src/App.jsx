@@ -7,6 +7,7 @@ import Signup from './Pages/SignupPage'
 import Login from './Pages/Loginpage'
 import CoursePage from './Pages/CoursePage'
 import Courseinfo from './Pages/CourseInfo'
+import DeniedPage from './Pages/DeniedPage'
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
       <Route path='/signup' element={<Signup/>}></Route>
       <Route path='/login' element={<Login/>}></Route>
       <Route path='/courses' element={<CoursePage/>}></Route>
+      <Route path='/denied' element={<DeniedPage/>}></Route>
       <Route path='/courses/course-details/:courseId' element={<Courseinfo/>}></Route>
     
 

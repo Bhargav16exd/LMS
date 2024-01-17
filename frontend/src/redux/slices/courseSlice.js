@@ -18,7 +18,8 @@ export const crtCourse = createAsyncThunk(
                 success:"Course Created Successfully",
                 loading:"Creating Course",
                 error:"Error ! faild to create course"
-            }    
+            },
+            {position:"bottom-right" }     
             )
             console.log(data)
             return (await res).data
@@ -30,22 +31,44 @@ export const crtCourse = createAsyncThunk(
     }
 )
 
-
 export const getCourses = createAsyncThunk(
     "/course/course-list",
     async function(){
         try {
-
             const data = axiosInstance.get("http://localhost:9000/api/v1/course/list-courses")
             toast.promise(data,
             {
                 loading:"Wait ! Fetching Course",
                 error:"Error ! Failed to fetch courses"
+            },{
+                position:"bottom-right"
             })
             return (await data).data
         } catch (error) {
-            console.log(error)
             toast.error(error);
+        }
+    }
+)
+
+export const updateCoures = createAsyncThunk(
+    "/course/edit-course",
+    async function(course){
+        console.log(course)
+        try {
+            const res = axiosInstance.post(`http://localhost:9000/api/v1/course/${course.courseId}/edit-course`,course.courseData,{
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            })
+            toast.promise(res,
+            {
+                loading:"Updating Course",
+                error:"Error While Updating Course"
+            },{position:"bottom-right"})
+            return (await res).data
+            
+        } catch (error) {
+             toast.error(error)
         }
     }
 )
@@ -53,13 +76,13 @@ export const getCourses = createAsyncThunk(
 export const getCourseDetail = createAsyncThunk(
     '/course/singleCourse',
     async function(id){
-        const course = axiosInstance.get(`http://localhost:9000/api/v1/course/${id}`)
         try {
+            const course = axiosInstance.get(`http://localhost:9000/api/v1/course/${id}`)
             toast.promise(course,{
                 loading:"Fetching Course Details",
                 success:"Course Fetched Successfully",
                 error:"Error"
-            })
+            },{position:"bottom-right"})
             return (await course).data
         } catch (error) {
             console.log(error)

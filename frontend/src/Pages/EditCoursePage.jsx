@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import axiosInstance from "../helpers/axiosInstance";
+import { updateCoures } from "../redux/slices/courseSlice";
 
 function EditCourse(){
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const course = useSelector((state)=>state.course.course)
     
@@ -59,41 +61,36 @@ function EditCourse(){
             const formData = new FormData();
             formData.append("thumbnail",courseData.thumbnail)
             try {
-                const response = await axiosInstance.post(`http://localhost:9000/api/v1/course/${courseId}/edit-thumbnail`,formData)
+                const response = axiosInstance.post(`http://localhost:9000/api/v1/course/${courseId}/edit-thumbnail`,formData)
+                toast.promise(response,{
+                    loading:"Updating Thumbnail"
+                })
+                await response
             } catch (error) {
+                console.log(error)
                 toast.error("Error While Uploading Thumnail")
             }
        }
 
        
-       // Updating Course Data
+          // Updating Course Data
 
-        try {
+            const res = await dispatch(updateCoures({courseData,courseId}))    
             
-            const res = await axiosInstance.post(`http://localhost:9000/api/v1/course/${courseId}/edit-course`,courseData,{
-                headers:{
-                    'Content-Type':'application/json'
-                }
-            })
-            if(res){
-               toast.success("Course Updated Successfully")
-            }
-            if(res.data.success){
+            console.log(res)
+
+            if(res.payload.success){
+                setCourseData({
+                    ...courseData,
+                    title:"",
+                    description:"",
+                    instructor:"",
+                    thumbnail:"",
+                    thumbnailPreview:""
+                }) 
                 navigate('/courses');
             }
-            setCourseData({
-                ...courseData,
-                title:"",
-                description:"",
-                instructor:"",
-                thumbnail:"",
-                thumbnailPreview:""
-            })  
-            
-        } catch (error) {
-            console.log(error)
-            toast.error(error?.response?.data?.message)
-        }
+             
     }
 
     return (

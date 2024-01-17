@@ -115,9 +115,13 @@ const viewLecture = asyncHandler(async(req,res)=>{
 })
 
 const updateCourse = asyncHandler(async(req,res)=>{
+
+    console.log(req.body)
   
     const {title,description,instructor} = req.body
     const {courseId} = req.params;
+
+    console.log(title,description,instructor);
 
     if(!courseId){
         throw new ApiError(400,"Invalid Request")

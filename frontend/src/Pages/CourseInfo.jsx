@@ -52,12 +52,11 @@ function Courseinfo(){
                             </button> 
                         }
                         {
-                            role == "ADMIN" ? 
-                            <button className="my-2 mx-2 rounded-xl py-1 px-2 border border-yellow-600 text-yellow-600 font-semibold">
-                            <Link >Admin Options</Link>
-                           </button>
-                            :
-                            <></>
+                            role == "ADMIN" ?  
+                            <button className="my-2 mx-2 rounded-xl py-1 px-1 border border-yellow-600 text-yellow-600 font-semibold">
+                            <Link to={`/courses/edit-course/${courseId}`}>Edit Course</Link>
+                            </button>
+                            : <></>
                         }                   
                         </>
                         :

@@ -11,7 +11,7 @@ export const crtCourse = createAsyncThunk(
     "/admin/create-course",
     async function(data){
         try {
-
+            console.log(data)
             const res = axiosInstance.post("http://localhost:9000/api/v1/course/create-course",data)
             toast.promise(res,
             {
@@ -30,6 +30,7 @@ export const crtCourse = createAsyncThunk(
     }
 )
 
+
 export const getCourses = createAsyncThunk(
     "/course/course-list",
     async function(){
@@ -39,10 +40,8 @@ export const getCourses = createAsyncThunk(
             toast.promise(data,
             {
                 loading:"Wait ! Fetching Course",
-                success:"Course Succesfully fetched",
                 error:"Error ! Failed to fetch courses"
             })
-            console.log((await data).data)
             return (await data).data
         } catch (error) {
             console.log(error)

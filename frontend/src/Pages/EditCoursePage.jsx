@@ -1,28 +1,30 @@
-import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Homelayout from "../Layout/Homelayout";
-import { useDispatch } from "react-redux";
-import { crtCourse } from "../redux/slices/courseSlice";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import axiosInstance from "../helpers/axiosInstance";
 
-function CreateCourse(){
-    
-    const dispatch = useDispatch();
+function EditCourse(){
+
     const navigate = useNavigate();
 
+    const course = useSelector((state)=>state.course.course)
+    
+    const {courseId} = useParams()
+    
     const [courseData,setCourseData] = useState({
-        title:"",
-        description:"",
-        instructor:"",
+        title:course.title,
+        description:course.description,
+        instructor:course.instructor,
         thumbnail:"",
-        thumbnailPreview:""
+        thumbnailPreview:course.thumbnailURL
     })
+    
 
     function getThumbnail(e){
        e.preventDefault();
        const img = e.target.files[0];
-
-       console.log(img)
-
        const fileReader = new FileReader();
        fileReader.readAsDataURL(img);
        fileReader.addEventListener("load", function(){
@@ -34,53 +36,72 @@ function CreateCourse(){
        })
 
     }
+    
+    // Changes the Course Data State
 
     function handleUserInput(e){
         e.preventDefault();
-        const {name,value} = e.target
-        setCourseData({
-            ...courseData,
-            [name]:value
-        })
-    }
 
-    async function createCourse(e){
+        const {name,value} = e.target
+        setCourseData((prevData)=>({
+            ...prevData,
+            [name]:value
+        }))
+    }
+    
+    
+    async function upCourse(e){
        e.preventDefault();
-       const formData = new FormData();
-       formData.append("title",courseData.title)
-       formData.append("description",courseData.description)
-       formData.append("instructor",courseData.instructor)
+ 
+        //Updating Thumbnail
 
        if(courseData.thumbnail){
-        formData.append("thumbnail",courseData.thumbnail)
+            const formData = new FormData();
+            formData.append("thumbnail",courseData.thumbnail)
+            try {
+                const response = await axiosInstance.post(`http://localhost:9000/api/v1/course/${courseId}/edit-thumbnail`,formData)
+            } catch (error) {
+                toast.error("Error While Uploading Thumnail")
+            }
        }
 
-      console.log(formData)
+       
+       // Updating Course Data
 
-       const res = await dispatch(crtCourse(formData))
-
-       if (res?.payload?.success) {
-        navigate('/courses');
-       }
-
-       setCourseData({
-        ...courseData,
-        title:"",
-        description:"",
-        instructor:"",
-        thumbnail:"",
-        thumbnailPreview:""
-       })
+        try {
+            
+            const res = await axiosInstance.post(`http://localhost:9000/api/v1/course/${courseId}/edit-course`,courseData,{
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            })
+            if(res){
+               toast.success("Course Updated Successfully")
+            }
+            if(res.data.success){
+                navigate('/courses');
+            }
+            setCourseData({
+                ...courseData,
+                title:"",
+                description:"",
+                instructor:"",
+                thumbnail:"",
+                thumbnailPreview:""
+            })  
+            
+        } catch (error) {
+            console.log(error)
+            toast.error(error?.response?.data?.message)
+        }
     }
 
-    
-
-    return(
+    return (
         <Homelayout>
         
         <div className="relative h-[90vh] ml-20 flex justify-center items-center">
             
-            <form onSubmit={createCourse} className="bg-[#191A19] h-5/6 w-5/6 flex ">
+            <form onSubmit={upCourse} className="bg-[#191A19] h-5/6 w-5/6 flex ">
              
                 <div className=" w-1/2 h-full">
 
@@ -101,7 +122,7 @@ function CreateCourse(){
                     <div className="h-1/3 flex items-center justify-center">
                     <button
                     className="my-5 rounded-lg text-xl px-2 py-1 w-80  bg-indigo-500 shadow-md shadow-indigo-500/50">
-                        Create Course
+                        Update Course
                     </button>
                     </div>    
                 </div>
@@ -163,7 +184,6 @@ function CreateCourse(){
         
        </Homelayout>
     )
-
 }
 
-export default CreateCourse;
+export default EditCourse;

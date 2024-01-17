@@ -11,6 +11,7 @@ import DeniedPage from './Pages/DeniedPage'
 import RequireAuth from './components/Auth/RequireAuth'
 import AdminDashboard from './Pages/Admindashborad'
 import CreateCourse from './Pages/CreateCourse'
+import EditCourse from './Pages/EditCoursePage'
 
 
 function App() {
@@ -37,7 +38,8 @@ function App() {
       
        <Route path='/admin/dashboard' element={<AdminDashboard/>}></Route>  
        <Route path='/course/create-course' element={<CreateCourse/>}></Route>    
-       
+       <Route path='/courses/edit-course/:courseId' element={<EditCourse/>}></Route>    
+      
       </Route>
       
 

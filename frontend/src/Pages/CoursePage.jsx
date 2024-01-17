@@ -17,7 +17,7 @@ function CoursePage(){
     },[])
     return(
         <Homelayout>
-            <div className="h-[90vh] ml-16 flex-wrap">
+            <div className="min-h-[90vh] h-auto ml-16 flex-wrap">
              <div className="ml-10 mt-2 py-10 px-2">
              
              {courseData.map((data)=> 

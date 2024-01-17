@@ -12,7 +12,7 @@ function AdminDashboard(){
                     <Link to="/course/create-course">Create Course</Link> 
                     </button>
                     <button className="rounded-lg py-5 mx-5 px-8 border border-yellow-600 text-yellow-600 font-semibold">
-                    <Link to="/login">Update Course</Link> 
+                    <Link to="/courses">Update Course</Link> 
                     </button>
                     </div>
                </div>

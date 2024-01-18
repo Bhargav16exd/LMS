@@ -19,7 +19,8 @@ export const crtCourse = createAsyncThunk(
                 loading:"Creating Course",
                 error:"Error ! faild to create course"
             },
-            {position:"bottom-right" }     
+            {position:"bottom-right" 
+        }     
             )
             console.log(data)
             return (await res).data
@@ -85,10 +86,27 @@ export const getCourseDetail = createAsyncThunk(
             },{position:"bottom-right"})
             return (await course).data
         } catch (error) {
-            console.log(error)
             toast.error(error)
         }
     }
+)
+
+export const deleteCourse = createAsyncThunk(
+    "/course/delete-course",
+    async function(courseId){
+
+        try {
+            const res = axiosInstance.post(`http://localhost:9000/api/v1/course/${courseId}/delete-course`)
+            toast.promise(res,{
+                loading:"deleting course"
+            },{position:"bottom-right"})
+            return (await res).data
+        } catch (error) {
+            toast.error(error)
+        }
+
+    }
+   
 )
 
 const courseSlice = createSlice({

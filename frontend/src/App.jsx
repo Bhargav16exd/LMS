@@ -12,6 +12,7 @@ import RequireAuth from './components/Auth/RequireAuth'
 import AdminDashboard from './Pages/Admindashborad'
 import CreateCourse from './Pages/CreateCourse'
 import EditCourse from './Pages/EditCoursePage'
+import Profile from './Pages/User/ProfilePage'
 
 
 function App() {
@@ -34,11 +35,16 @@ function App() {
 
       {/* Admin Routes  */}
 
-      <Route element={<RequireAuth allowedRoles={"ADMIN"}/>}>
+      <Route element={<RequireAuth allowedRoles={["ADMIN"]}/>}>
       
        <Route path='/admin/dashboard' element={<AdminDashboard/>}></Route>  
        <Route path='/course/create-course' element={<CreateCourse/>}></Route>    
        <Route path='/courses/edit-course/:courseId' element={<EditCourse/>}></Route>    
+      
+      </Route>
+      <Route element={<RequireAuth allowedRoles={["ADMIN","USER"]}/>}>
+      
+       <Route path='/user/profile' element={<Profile/>}></Route>  
       
       </Route>
       

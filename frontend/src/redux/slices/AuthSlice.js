@@ -5,7 +5,7 @@ import axiosInstance from "../../helpers/axiosInstance"
 const initialState = {
     isLoggedIn : localStorage.getItem('isLoggedIn') || false,
     role: localStorage.getItem('role') || "",
-    data: localStorage.getItem('data') || {},
+    data: JSON.parse(localStorage.getItem('data')) || {},
     subscribedCourse : localStorage.getItem('course') || []
 }
 
@@ -100,7 +100,7 @@ const authSlice = createSlice({
             localStorage.setItem("role",action?.payload?.data?.loggedInUserDetails?.role)
             localStorage.setItem("isLoggedIn",true)
             localStorage.setItem("course",action?.payload?.data?.loggedInUserDetails?.subscribedCourse)
-            state.data = action?.payload?.user
+            state.data = action?.payload?.data.loggedInUserDetails
             state.isLoggedIn = true
             state.role = action?.payload?.data?.loggedInUserDetails?.role
             state.subscribedCourse = action?.payload?.data?.loggedInUserDetails?.subscribedCourse

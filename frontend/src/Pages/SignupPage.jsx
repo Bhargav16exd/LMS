@@ -48,10 +48,6 @@ function Signup (){
     async function createAccout(e){
         e.preventDefault();
       
-        console.log(signUpData.avatar,signUpData.email,signUpData.fullName,signUpData.password)
-
-       
-
         const formData = new FormData()
         formData.append("fullName" ,signUpData.fullName)
         formData.append("email" ,signUpData.email)

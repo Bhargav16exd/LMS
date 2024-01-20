@@ -6,7 +6,7 @@ const initialState = {
     isLoggedIn : localStorage.getItem('isLoggedIn') || false,
     role: localStorage.getItem('role') || "",
     data: JSON.parse(localStorage.getItem('data')) || {},
-    subscribedCourse : localStorage.getItem('course') || []
+    subscribedCourse: localStorage.getItem('course') || []
 }
 
 export const createAcc= createAsyncThunk(
@@ -65,8 +65,25 @@ export const logout = createAsyncThunk(
             })
             return (await res).data
         } catch (error) {
-            console.log(error)
             toast.error(error?.message) 
+        }
+    }
+)
+
+export const updateProfilePicture = createAsyncThunk(
+    "/user/edit-profile",
+    async function(data){
+        try {
+
+            const res = axiosInstance.post("http://localhost:9000/api/v1/user/change-avatar/",data)
+            toast.promise(res,{
+                loading:"updating profile"
+            })
+
+            return (await res).data
+            
+        } catch (error) {
+            
         }
     }
 )
@@ -96,6 +113,7 @@ const authSlice = createSlice({
     extraReducers: (builder)=>{
         builder
         .addCase(loginAcc.fulfilled,(state,action)=>{
+            console.log(action.payload.data.loggedInUserDetails)
             localStorage.setItem("data",JSON.stringify(action?.payload?.data?.loggedInUserDetails))
             localStorage.setItem("role",action?.payload?.data?.loggedInUserDetails?.role)
             localStorage.setItem("isLoggedIn",true)
@@ -118,6 +136,10 @@ const authSlice = createSlice({
             state.subscribedCourse = action?.payload?.data?.subscribedCourse
             console.log(state.subscribedCourse)
         }})
+        .addCase(updateProfilePicture.fulfilled,(state,action)=>{
+            localStorage.setItem("data",JSON.stringify(action?.payload?.data))
+            state.data = action?.payload?.data
+        })
         
     } 
 })

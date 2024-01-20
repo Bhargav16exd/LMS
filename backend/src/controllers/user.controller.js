@@ -267,7 +267,8 @@ const changeAvatar = asyncHandler(async(req,res)=>{
     const user = await User.findByIdAndUpdate(req.user?._id , {
         avatar : avatarURL.url,
         avatarId : avatarURL.public_id
-    })
+    },
+    {new:true})
 
     await user.save();
 

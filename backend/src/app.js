@@ -29,7 +29,7 @@ import courseRouter from "./routes/course.router.js"
 app.use("/api/v1/user/",userRouter);
 app.use("/api/v1/course/",courseRouter);
 
-app.use((err, req, res) => {
+app.use((err, req, res,next) => {
     const statusCode = err.statusCode || 500;
     const message = err.message || 'Internal Server Error';
     const errors = err.errors || [];

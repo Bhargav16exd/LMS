@@ -14,6 +14,7 @@ import CreateCourse from './Pages/CreateCourse'
 import EditCourse from './Pages/EditCoursePage'
 import Profile from './Pages/User/ProfilePage'
 import EditProfilePage from './Pages/User/EditProfilePage'
+import ChangePasswordPage from './Pages/User/ChangePasswordPage'
 
 
 function App() {
@@ -43,10 +44,14 @@ function App() {
        <Route path='/courses/edit-course/:courseId' element={<EditCourse/>}></Route>    
       
       </Route>
+
+      {/* Logged In Routes */}
+
       <Route element={<RequireAuth allowedRoles={["ADMIN","USER"]}/>}>
       
        <Route path='/user/profile' element={<Profile/>}></Route>
        <Route path='/user/edit-profile' element={<EditProfilePage/>}></Route>  
+       <Route path='/user/change-password' element={<ChangePasswordPage/>}></Route>
   
       </Route>
       

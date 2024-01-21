@@ -42,7 +42,7 @@ export const loginAcc = createAsyncThunk(
                     success:(data)=>{
                         return data?.data?.message
                     },
-                    error:"Error"
+                    error:""
                 },
                 )
                 return (await res).data
@@ -83,7 +83,27 @@ export const updateProfilePicture = createAsyncThunk(
             return (await res).data
             
         } catch (error) {
+            console.log(error)
+            toast.error(error)
+        }
+    }
+)
+
+export const updateCurrentPassword = createAsyncThunk(
+    "user/change-password",
+    async function(data){
+        try {
+
+            const res = axiosInstance.post("http://localhost:9000/api/v1/user/change-password/",data)
+            toast.promise(res,{
+                loading:"changing password",
+                error:""
+            })
+            return (await res).data
             
+        } catch (error) {
+            console.log(error)
+            toast.error(error?.response?.data?.message)   
         }
     }
 )

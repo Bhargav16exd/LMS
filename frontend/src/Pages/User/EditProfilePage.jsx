@@ -9,7 +9,8 @@ import toast from "react-hot-toast";
 
 function EditProfilePage(){
 
-    const {avatar ,email , fullName , role} = useSelector((state)=>state?.auth?.data)
+    const {avatar ,email , fullName } = useSelector((state)=>state?.auth?.data)
+
 
     const dispatch = useDispatch();
     const navigate = useNavigate()
@@ -22,14 +23,15 @@ function EditProfilePage(){
     function getProfile(e){
        e.preventDefault();
        const img = e.target.files[0]
-       
+
+     
        const fileReader = new FileReader()
        fileReader.readAsDataURL(img)
        fileReader.addEventListener("load",function(){
         setProfile({
             ...profile,
+            profileURL:img,
             profilePreview:this.result,
-            profileURL:img
         })
        })
 
@@ -48,18 +50,16 @@ function EditProfilePage(){
         if(profile.profileURL){
             formData.append("avatar",profile.profileURL)
             const res = await dispatch(updateProfilePicture(formData))
+            console.log(res)
 
-
-        console.log(res)
-
-        if(res.payload.success){
-            navigate('/user/profile')
-            setProfile({
-                ...profile,
-                profilePreview:"",
-                profileURL:""
-            })
-        }
+            if(res.payload.success){
+                setProfile({
+                    ...profile,
+                    profilePreview:"",
+                    profileURL:""
+                })
+                navigate('/user/profile')
+            }
         }
 
 
@@ -72,12 +72,12 @@ function EditProfilePage(){
         <div className="h-[90vh] ml-16 flex justify-center items-center">
 
             
-            <div className="h-3/4 w-2/4 rounded-md shadow-md shadow-blue-400">
+            <div className="h-3/4 w-2/4 py-4 rounded-md shadow-md shadow-blue-400">
               
-             <form onSubmit={updateProfile} className="h-full w-full">
-                <div className=" h-3/4 w-full font-mono text-xl flex flex-col justify-center items-center space-y-4">
+             <form noValidate onSubmit={updateProfile} className="h-full w-full">
+                <div className=" h-3/4 w-full font-mono flex flex-col justify-center items-center space-y-4">
              
-
+                  
                  <label htmlFor="image_uploads">
                     {
                         profile.profilePreview ?
@@ -92,18 +92,21 @@ function EditProfilePage(){
                    name="image_uploads" 
                    className="hidden"
                    accept=".jpg , .png , .svg" />
+                 
 
 
                  <p>email : {email}</p>
                  <p>fullName : {fullName}</p>
-                 <p>role : {role}</p>
-                </div> 
-                <div className="h-1/4 w-full flex justify-around items-center">
 
+
+                </div> 
+
+                <div className="flex ">
+                <div className="h-1/4 w-full flex justify-around items-center">
                     <button className="rounded-sm py-2 px-5 border border-yellow-600 text-yellow-600  font-semibold">
                       Update Profile 
                     </button>
-                    
+                </div>
                 </div>
             </form>
             </div>

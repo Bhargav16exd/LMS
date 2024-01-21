@@ -7,7 +7,6 @@ function Profile(){
 
     const {avatar ,email , fullName , role} = useSelector((state)=>state?.auth?.data)
 
-
     return(
         <Homelayout>
 
@@ -24,10 +23,10 @@ function Profile(){
                     <div className="h-1/4 w-full flex justify-around items-center">
 
                         <button className="rounded-sm py-2 px-5 border border-yellow-600 text-yellow-600  font-semibold">
-                         Forgot Password 
+                        <Link to={'/user/change-password'}>Change Password </Link> 
                         </button>
                         <button className="rounded-sm py-2 px-5 border border-yellow-600 text-yellow-600 font-semibold">
-                        <Link to={'/user/edit-profile'}>Edit Profile</Link>
+                        <Link to={'/user/edit-profile'}>Edit Profile Picture</Link>
                         </button>
 
                         

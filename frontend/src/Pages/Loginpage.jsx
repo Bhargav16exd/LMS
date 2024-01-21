@@ -28,14 +28,11 @@ function Login(){
     async function loginAccount(e){
         e.preventDefault();
   
-             try {
                 const res = await dispatch(loginAcc(loginData));
                 if (res?.payload?.success) {
                     navigate('/');
                 }
-            } catch (error) {
-                toast.error("An error occurred while creating the account");
-            }
+            
 
         setLoginData({
         email:"",

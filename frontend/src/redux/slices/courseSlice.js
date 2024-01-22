@@ -19,8 +19,7 @@ export const crtCourse = createAsyncThunk(
                 loading:"Creating Course",
                 error:"Error ! faild to create course"
             },
-            {position:"bottom-right" 
-        }     
+            {position:"bottom-right"}     
             )
             console.log(data)
             return (await res).data

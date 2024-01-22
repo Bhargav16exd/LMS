@@ -15,6 +15,7 @@ import EditCourse from './Pages/EditCoursePage'
 import Profile from './Pages/User/ProfilePage'
 import EditProfilePage from './Pages/User/EditProfilePage'
 import ChangePasswordPage from './Pages/User/ChangePasswordPage'
+import ViewLecture from './Pages/Lecture/ViewLecture'
 
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
        <Route path='/user/profile' element={<Profile/>}></Route>
        <Route path='/user/edit-profile' element={<EditProfilePage/>}></Route>  
        <Route path='/user/change-password' element={<ChangePasswordPage/>}></Route>
+       <Route path='/course/:courseId/view-lecture' element={<ViewLecture/>}></Route>
   
       </Route>
       

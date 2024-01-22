@@ -6,6 +6,23 @@ const initialState = {
     lectures:[]
 }
 
+export const createLecture = createAsyncThunk(
+    "/lecture/create-lecture",
+    async function(data){
+        try {
+
+            const res = axiosInstance.post(`http://localhost:9000/api/v1/course/${data.courseId}/create-lecture`,data.formData)
+            toast.promise(res,{
+                loading:"Uploading lecture",
+                success:"Lecture upload Success"
+              })
+              return (await res).data  
+            
+        } catch (error) {
+            toast.error(error)
+        }
+    }
+)
 
 export const ListLectures = createAsyncThunk(
     "/lecture/view-lectures",
@@ -33,6 +50,7 @@ export const DeleteLecture = createAsyncThunk(
                 loading:"Deleting Lecture",
                 success:"Lecture Deleted Successfully"
             })
+
             return (await res).data
 
         } catch (error) {

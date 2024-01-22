@@ -16,6 +16,7 @@ import Profile from './Pages/User/ProfilePage'
 import EditProfilePage from './Pages/User/EditProfilePage'
 import ChangePasswordPage from './Pages/User/ChangePasswordPage'
 import ViewLecture from './Pages/Lecture/ViewLecture'
+import CreateLecture from './Pages/Lecture/CreateLecture'
 
 
 function App() {
@@ -42,7 +43,8 @@ function App() {
       
        <Route path='/admin/dashboard' element={<AdminDashboard/>}></Route>  
        <Route path='/course/create-course' element={<CreateCourse/>}></Route>    
-       <Route path='/courses/edit-course/:courseId' element={<EditCourse/>}></Route>    
+       <Route path='/courses/edit-course/:courseId' element={<EditCourse/>}></Route>  
+       <Route path='/course/:courseId/create-lecture' element={<CreateLecture/>}></Route>  
       
       </Route>
 

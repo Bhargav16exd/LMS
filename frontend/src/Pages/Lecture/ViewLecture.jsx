@@ -76,7 +76,7 @@ function ViewLecture(){
                      <div className="w-full h-[10vh] flex items-center justify-end">
                            <button 
                             className="my-2 mx-2 rounded-xl py-1 px-4 border border-yellow-600 text-yellow-600 font-semibold">
-                             Add Lecture
+                            <Link to={`/course/${courseId}/create-lecture`}>Add Lecture</Link> 
                             </button>
                      </div> : <></>
                     }

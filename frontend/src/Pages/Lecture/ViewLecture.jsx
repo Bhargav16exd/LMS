@@ -97,11 +97,7 @@ function ViewLecture(){
 
                                  <div className="w-1/2 h-full flex justify-end items-center">
                                   {role == "ADMIN" && 
-                                        // <button onClick={handleDelete}
-                                        //     className="my-2 mx-2 rounded-xl py-1 px-4 border border-yellow-600 text-yellow-600 font-semibold justify-end">
-                                        //     Delete Lecture
-                                        // </button>
-
+                                        <>
                                         <Popup trigger={
                                             <button 
                                             className="my-2 mx-2 rounded-xl py-1 px-1 border border-yellow-600 text-yellow-600 font-semibold">
@@ -134,8 +130,12 @@ function ViewLecture(){
                 
                                             </div>
                                             </Popup>
+                                            <button
+                                            className="my-2 mx-2 rounded-xl py-1 px-1 border border-yellow-600 text-yellow-600 font-semibold">
+                                            <Link to={`/course/${courseId}/edit-lecture/${lectureDataFromState[currentLecture]?._id}`}>Edit Lecture</Link>    
+                                            </button>
 
-
+                                        </>
                                   }
                                   </div>
 

@@ -17,6 +17,7 @@ import EditProfilePage from './Pages/User/EditProfilePage'
 import ChangePasswordPage from './Pages/User/ChangePasswordPage'
 import ViewLecture from './Pages/Lecture/ViewLecture'
 import CreateLecture from './Pages/Lecture/CreateLecture'
+import EditLecture from './Pages/Lecture/EditLecturePage'
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
        <Route path='/course/create-course' element={<CreateCourse/>}></Route>    
        <Route path='/courses/edit-course/:courseId' element={<EditCourse/>}></Route>  
        <Route path='/course/:courseId/create-lecture' element={<CreateLecture/>}></Route>  
+       <Route path='/course/:courseId/edit-lecture/:lectureId' element={<EditLecture/>}></Route>
       
       </Route>
 

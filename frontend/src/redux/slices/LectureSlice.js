@@ -59,6 +59,25 @@ export const DeleteLecture = createAsyncThunk(
     }
 )
 
+export const CallEditLectureAPI = createAsyncThunk(
+    "lecture/Edit-lecture",
+    async function(IDs){
+
+        try {
+            const res = axiosInstance.post(`http://localhost:9000/api/v1/course/${IDs.courseId}/edit-lecture/${IDs.lectureId}`,IDs.data)
+            toast.promise(res,{
+                loading:"Updating Lecture",
+                success:"Lecture Updated Successfully"
+            })
+
+            return (await res).data
+
+        } catch (error) {
+            toast.error(error)
+        }
+    }
+)
+
 const lectureSlice = createSlice({
     name:"lecture",
     initialState,

@@ -2,7 +2,6 @@ import { useState } from "react";
 import Homelayout from "../Layout/Homelayout";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-hot-toast";
 import { loginAcc } from "../redux/slices/AuthSlice";
 
 function Login(){
@@ -84,8 +83,13 @@ function Login(){
                    </button>
 
                    <p className="pb-2">
-                    Dont have an accout ? 
+                     Dont have an account ? 
                     <Link to={'/signup'} className="link"> SignUp </Link>
+                   </p>
+
+                   <p className="pb-2">
+                     
+                    <Link to={'/forgot-password'} className="link"> Forgot Password ?  </Link>
                    </p>
 
                 </form>

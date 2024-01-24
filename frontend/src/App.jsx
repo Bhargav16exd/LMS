@@ -18,6 +18,7 @@ import ChangePasswordPage from './Pages/User/ChangePasswordPage'
 import ViewLecture from './Pages/Lecture/ViewLecture'
 import CreateLecture from './Pages/Lecture/CreateLecture'
 import EditLecture from './Pages/Lecture/EditLecturePage'
+import ForgotPassword from './Pages/ForgotPassword'
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
       <Route path='/about' element={<Aboutus/>}></Route>
       <Route path='/signup' element={<Signup/>}></Route>
       <Route path='/login' element={<Login/>}></Route>
+      <Route path='/forgot-password' element={<ForgotPassword/>}></Route>
       <Route path='/courses' element={<CoursePage/>}></Route>
       <Route path='/denied' element={<DeniedPage/>}></Route>
       <Route path='/courses/course-details/:courseId' element={<Courseinfo/>}></Route>

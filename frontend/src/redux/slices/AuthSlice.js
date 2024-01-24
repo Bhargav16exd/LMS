@@ -125,6 +125,21 @@ export const handleSubscribe = createAsyncThunk(
     }
    }
 )
+export const CallForgotPasswordAPI = createAsyncThunk(
+    "/auth/forgot-password",
+    async function(email){
+        console.log(email)
+     try {
+         const res = axiosInstance.post(`http://localhost:9000/api/v1/user/forgot-password/`,email)
+         toast.promise(res,{
+             loading:"Sending mail",
+         })
+         return (await res).data
+     } catch (error) {
+         toast.error(error?.message) 
+     }
+    }
+ )
 
 const authSlice = createSlice({
     name:"auth",

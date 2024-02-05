@@ -9,6 +9,9 @@ const initialState = {
     subscribedCourse: localStorage.getItem('course') || []
 }
 
+
+
+
 export const createAcc= createAsyncThunk(
     "/auth/signup",
     async function (data){
@@ -63,6 +66,7 @@ export const logout = createAsyncThunk(
                 },
                 error:"Error"
             })
+            localStorage.clear()
             return (await res).data
         } catch (error) {
             toast.error(error?.message) 
@@ -159,6 +163,7 @@ const authSlice = createSlice({
             state.subscribedCourse = action?.payload?.data?.loggedInUserDetails?.subscribedCourse
         })
         .addCase(logout.fulfilled,(state,action)=>{
+            console.log("HI")
             state.data ={}
             state.isLoggedIn = false
             state.role =""

@@ -6,8 +6,13 @@ import { User } from "../models/user.model.js"
 const authMiddleware = asyncHandler(async(req,res,next)=>{
 
     try {
+
+        console.log("hi");
         
         const token = req.cookies?.accessToken || req.Header("Authorization")?.replace("Bearer","")
+
+        console.log("token",token)
+        console.log("req cookies",req.cookies)
     
         if(!token){
             throw new ApiError(400,"You are not authorized")
@@ -33,7 +38,6 @@ const authMiddleware = asyncHandler(async(req,res,next)=>{
 
 const isAuthorized = asyncHandler(async(req,res,next)=>{
   
-    console.log(req.user.role)
 
     if(req.user.role == "ADMIN"){
         next()

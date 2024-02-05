@@ -136,6 +136,8 @@ const login = asyncHandler(async(req,res)=>{
 })
 
 const logout = asyncHandler(async(req,res)=>{
+   
+    console.log("logout")
     
     const options = {
         httpOnly:true,
@@ -171,13 +173,16 @@ const forgotPassword = asyncHandler(async(req,res)=>{
 
     const {email} = req.body
 
+    console.log(email)
+
     if(!email){
-        throw new ApiError(400,"Kindly Provide Token")
+        throw new ApiError(400,"Kindly Provide Email")
     }
 
     const forgotToken = await forgotPasswordTokenGenerator(email);
 
     const resetPasswordURL = `http://localhost:9000/api/v1/user/reset-password/${forgotToken}`
+
 
     await sendMail(email,resetPasswordURL)
 

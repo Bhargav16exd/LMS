@@ -16,7 +16,7 @@ router.route("/:courseId").get(courseDetails)
 // Authorized Routes
 
 router.route("/list/sub-courses").get(authMiddleware,subCourses)
-router.route("/:courseId/view-lectures").get(authMiddleware,viewLecture)
+router.route("/:courseId/view-lecture").get(authMiddleware,viewLecture)
 router.route("/:id/subscribe-course").post(authMiddleware,subscribe)
 
 
